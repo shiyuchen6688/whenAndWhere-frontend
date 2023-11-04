@@ -1,0 +1,135 @@
+/* Reset some default styles */
+body,
+h1,
+h2,
+p,
+ul,
+li {
+  margin: 0;
+  padding: 0;
+  /* Removes default browser margin and padding */
+}
+
+body {
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+  padding: 20px;
+  /* Sets default font style and line height with padding around the content */
+}
+
+header {
+  background: #333;
+  color: #fff;
+  padding: 10px 20px;
+  /* Styles the header with a dark background and white text */
+}
+
+h1 {
+  margin-bottom: 10px;
+  /* Adds space below the h1 heading */
+}
+
+/* Navigation styles */
+nav ul {
+  list-style: none;
+  /* Removes the default list item bullets */
+}
+
+nav ul li {
+  display: inline;
+  margin-right: 10px;
+  /* Places nav items in a horizontal row with spacing */
+}
+
+nav a {
+  text-decoration: none;
+  color: #fff;
+  /* Removes underline from links and sets their color to white */
+}
+
+/* Main content area */
+main {
+  margin-top: 20px;
+  /* Adds space above the main content */
+}
+
+h2 {
+  color: #333;
+  margin-bottom: 10px;
+  /* Dark color for h2 headings with space below */
+}
+
+p {
+  margin-bottom: 10px;
+  /* Adds space below paragraphs */
+}
+
+/* Unordered list styles */
+ul {
+  list-style-type: square;
+  margin-bottom: 10px;
+  /* Uses square bullets and adds space below the list */
+}
+
+ul li {
+  margin-left: 20px;
+  /* Indents list items */
+}
+
+/* Form styles */
+form {
+  margin-top: 10px;
+  /* Adds space above the form element */
+}
+
+form label,
+form input,
+form textarea {
+  display: block;
+  margin-bottom: 10px;
+  /* Stacks form items vertically with space between */
+}
+
+form input,
+form textarea {
+  width: 100%;
+  padding: 8px;
+  /* Full width inputs with padding for text */
+}
+
+/* Button styles */
+form button {
+  display: inline-block;
+  background: #333;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  /* Styles the button with a dark background, padding, and pointer cursor */
+}
+
+form button:hover {
+  background: #555;
+  /* Changes button background on hover */
+}
+
+/* Footer styles */
+footer {
+  background: #333;
+  color: #fff;
+  text-align: center;
+  padding: 10px 20px;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  /* Styles the footer with a fixed position, dark background, and centered text */
+}
+
+/* Responsive styles for small screens */
+@media (max-width: 600px) {
+  nav ul li {
+    display: block;
+    margin-bottom: 10px;
+    /* Stacks nav items vertically on small screens */
+  }
+}
