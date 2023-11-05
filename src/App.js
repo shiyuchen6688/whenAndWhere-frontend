@@ -1,6 +1,9 @@
 import logo from './logo.svg';
 import './App.css';
 import LoginPage from './pages/LoginPage';  // import the login page
+import PostsPage from './pages/PostsPage';  // import pages
+import CreatePage from './pages/CreatePage';
+import ChatPage from './pages/ChatPage';
 import TopMenuBar from './components/TopMenuBar';
 // used to customize theme
 import { createTheme, ThemeProvider } from '@mui/material/styles';
@@ -26,10 +29,19 @@ function App() {
   return (
     // Wrap your application in the ThemeProvider and pass your theme as a prop
     <ThemeProvider theme={theme}>
-      <div>
-        <TopMenuBar />
-        <LoginPage />
-      </div>
+      <Router>
+        <div>
+          <TopMenuBar />
+          <Routes>
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/posts" element={<PostsPage />} />
+            <Route path="/create" element={<CreatePage />} />
+            <Route path="/chat" element={<ChatPage />} />
+            {/* Redirect to login page as the default route */}
+            <Route path="*" element={<LoginPage />} />
+          </Routes>
+        </div>
+      </Router>
     </ThemeProvider>
   );
 }
