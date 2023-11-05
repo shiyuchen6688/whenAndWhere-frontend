@@ -1,101 +1,104 @@
 import React, { useState } from 'react';
-//import './LoginPage.css'; // import css file
+// Importing necessary components from Material-UI
+import { Container, TextField, Button, Typography, Box, Grid, Link } from '@mui/material';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 
+const AuthForm = () => {
+    // State to manage form inputs and view toggle
+    const [isSignUp, setIsSignUp] = useState(false);
+    const [credentials, setCredentials] = useState({
+        username: '',
+        password: '',
+        email: '', // Added email for the signup process
+    });
 
-function LoginPage() {
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
+    // Toggle between sign up and sign in
+    const toggleIsSignUp = () => setIsSignUp(!isSignUp);
 
-    const handleUsernameChange = (event) => {
-        setUsername(event.target.value);
+    // Handle input changes
+    const handleChange = (prop) => (event) => {
+        setCredentials({ ...credentials, [prop]: event.target.value });
     };
 
-    const handlePasswordChange = (event) => {
-        setPassword(event.target.value);
-    };
-
+    // Handle form submission
     const handleSubmit = (event) => {
         event.preventDefault();
-        console.log('Login Submitted', { username, password });
-        // Here you would usually send a request to your server for authentication
+        console.log(isSignUp ? 'Signup Info' : 'Login Info', credentials);
+        // Here you would typically handle the login or signup logic
     };
 
     return (
-        <div className="login-container">
-            <form onSubmit={handleSubmit}>
-                <div>
-                    <label htmlFor="username">Username</label>
-                    <input
-                        type="text"
+        <Container component="main" maxWidth="xs">
+            <Box
+                sx={{
+                    marginTop: 8,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                }}
+            >
+                <LockOutlinedIcon />
+                <Typography component="h1" variant="h5">
+                    {isSignUp ? 'Sign up' : 'Log in'}
+                </Typography>
+                <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+                    {isSignUp && (
+                        <TextField
+                            margin="normal"
+                            required
+                            fullWidth
+                            id="email"
+                            label="Email Address"
+                            name="email"
+                            autoComplete="email"
+                            autoFocus={!isSignUp}
+                            value={credentials.email}
+                            onChange={handleChange('email')}
+                        />
+                    )}
+                    <TextField
+                        margin="normal"
+                        required
+                        fullWidth
                         id="username"
-                        value={username}
-                        onChange={handleUsernameChange}
+                        label="Username"
+                        name="username"
+                        autoComplete="username"
+                        autoFocus={isSignUp}
+                        value={credentials.username}
+                        onChange={handleChange('username')}
                     />
-                </div>
-                <div>
-                    <label htmlFor="password">Password</label>
-                    <input
+                    <TextField
+                        margin="normal"
+                        required
+                        fullWidth
+                        name="password"
+                        label="Password"
                         type="password"
                         id="password"
-                        value={password}
-                        onChange={handlePasswordChange}
+                        autoComplete="current-password"
+                        value={credentials.password}
+                        onChange={handleChange('password')}
                     />
-                </div>
-                <div>
-                    <button type="submit">Log In</button>
-                </div>
-            </form>
-        </div>
+                    <Button
+                        type="submit"
+                        fullWidth
+                        variant="contained"
+                        sx={{ mt: 3, mb: 2 }}
+                    >
+                        {isSignUp ? 'Sign Up' : 'Sign In'}
+                    </Button>
+                    <Grid container justifyContent="flex-end">
+                        <Grid item>
+                            <Link href="#" variant="body2" onClick={toggleIsSignUp}>
+                                {isSignUp ? 'Already have an account? Sign in' : "Don't have an account? Sign Up"}
+                            </Link>
+                        </Grid>
+                    </Grid>
+                </Box>
+            </Box>
+        </Container>
     );
-}
+};
 
-
-// const LoginPage = () => {
-//     const [username, setUsername] = useState('');
-//     const [password, setPassword] = useState('');
-
-//     const handleUsernameChange = (event) => {
-//         setUsername(event.target.value);
-//     };
-
-//     const handlePasswordChange = (event) => {
-//         setPassword(event.target.value);
-//     };
-
-//     const handleSubmit = (event) => {
-//         event.preventDefault();
-//         console.log('Login Submitted', { username, password });
-//         // Here you would usually send a request to your server for authentication
-//     };
-
-//     return (
-//         <div className="login-container">
-//             <form onSubmit={handleSubmit}>
-//                 <div>
-//                     <label htmlFor="username">Username</label>
-//                     <input
-//                         type="text"
-//                         id="username"
-//                         value={username}
-//                         onChange={handleUsernameChange}
-//                     />
-//                 </div>
-//                 <div>
-//                     <label htmlFor="password">Password</label>
-//                     <input
-//                         type="password"
-//                         id="password"
-//                         value={password}
-//                         onChange={handlePasswordChange}
-//                     />
-//                 </div>
-//                 <div>
-//                     <button type="submit">Log In</button>
-//                 </div>
-//             </form>
-//         </div>
-//     );
-// };
-
-
-export default LoginPage;
+export default AuthForm;
