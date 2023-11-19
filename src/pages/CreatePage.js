@@ -1,21 +1,52 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { TextField, Button, Chip, InputLabel, FormControl, Select, MenuItem, Box, Stack, Typography } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 const EventForm = () => {
     const [formData, setFormData] = useState({
         location: '',
         date: '',
         time: '',
-        peopleCountJoined: '',
-        peopleCountAllowed: '',
+        peopleCount: {
+            joined: 0,
+            allowed: 1
+        },
         restrictions: [],
         topic: '',
     });
 
+    // check if user have logged in
+    const isAuthenticated = !!localStorage.getItem('accessToken');
+    const navigate = useNavigate()
+    useEffect(() => {
+        // Redirect to the login page if the user is not authenticated
+        if (!isAuthenticated) {
+            navigate('/');
+        }
+    }, [isAuthenticated, navigate]);
+
     const [restriction, setRestriction] = useState('');
 
     const handleInputChange = (event) => {
-        setFormData({ ...formData, [event.target.name]: event.target.value });
+        const { name, value } = event.target;
+        console.log(name)
+
+        // If the field name contains a dot (e.g., "peopleCount.joined"),
+        // update the nested object accordingly
+        if (name.includes('.')) {
+            const [fieldName, nestedField] = name.split('.');
+            console.log(fieldName)
+            setFormData((prevData) => ({
+                ...prevData,
+                [fieldName]: {
+                    ...prevData[fieldName],
+                    [nestedField]: value,
+                },
+            }));
+            console.log(formData)
+        } else {
+            setFormData({ ...formData, [name]: value });
+        }
     };
 
     const handleRestrictionChange = (event) => {
@@ -36,10 +67,31 @@ const EventForm = () => {
         });
     };
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
         // Submit the form data
-        console.log(formData);
+        // console.log(formData);
+        try {
+            // Create a POST request to your backend endpoint
+            const response = await fetch('http://localhost:3001/api/posts', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'authorization': localStorage.getItem("accessToken")
+                },
+                body: JSON.stringify(formData),
+            });
+
+            if (response.ok) {
+                console.log('Event created successfully');
+                // Redirect to a success page or perform any necessary action
+                navigate('/posts');
+            } else {
+                console.error('Event creation failed');
+            }
+        } catch (error) {
+            console.error('Event creation failed:', error);
+        }
     };
 
     return (
@@ -66,6 +118,7 @@ const EventForm = () => {
                 name="location"
                 value={formData.location}
                 onChange={handleInputChange}
+                inputProps={{ style: { color: 'black' } }}
             />
             <TextField
                 label="Date"
@@ -74,6 +127,7 @@ const EventForm = () => {
                 InputLabelProps={{ shrink: true }}
                 value={formData.date}
                 onChange={handleInputChange}
+                inputProps={{ style: { color: 'black' } }}
             />
             <TextField
                 label="Time"
@@ -82,26 +136,30 @@ const EventForm = () => {
                 InputLabelProps={{ shrink: true }}
                 value={formData.time}
                 onChange={handleInputChange}
+                inputProps={{ style: { color: 'black' } }}
             />
             <TextField
                 label="People Joined"
-                name="peopleCountJoined"
+                name="peopleCount.joined"
                 type="number"
-                value={formData.peopleCountJoined}
+                value={formData.peopleCount.joined}
                 onChange={handleInputChange}
+                inputProps={{ style: { color: 'black' } }}
             />
             <TextField
                 label="People Allowed"
-                name="peopleCountAllowed"
+                name="peopleCount.allowed"
                 type="number"
-                value={formData.peopleCountAllowed}
+                value={formData.peopleCount.allowed}
                 onChange={handleInputChange}
+                inputProps={{ style: { color: 'black' } }}
             />
             <TextField
                 label="Topic"
                 name="topic"
                 value={formData.topic}
                 onChange={handleInputChange}
+                inputProps={{ style: { color: 'black' } }}
             />
             <Stack direction="row" spacing={1}>
                 <FormControl>
@@ -111,10 +169,11 @@ const EventForm = () => {
                         label="Restrictions"
                         onChange={handleRestrictionChange}
                         sx={{ m: 1, minWidth: 120 }}
+                        style={{ color: 'black' }}
                     >
-                        <MenuItem value="No Alcohol">No Alcohol</MenuItem>
-                        <MenuItem value="No Smoke">No Smoke</MenuItem>
-                        <MenuItem value="Adults Only">Adults Only</MenuItem>
+                        <MenuItem value="No Alcohol" style={{ color: 'black' }}>No Alcohol</MenuItem>
+                        <MenuItem value="No Smoke" style={{ color: 'black' }}>No Smoke</MenuItem>
+                        <MenuItem value="Adults Only" style={{ color: 'black' }}>Adults Only</MenuItem>
                     </Select>
                 </FormControl>
                 <Button variant="contained" onClick={handleAddRestriction}>
@@ -126,6 +185,7 @@ const EventForm = () => {
                     <Chip
                         key={index}
                         label={res}
+                        style={{ color: 'black' }}
                         onDelete={() => handleRemoveRestriction(res)}
                     />
                 ))}

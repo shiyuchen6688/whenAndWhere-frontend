@@ -1,11 +1,23 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Box, TextField, Button, List, ListItem, ListItemText, Paper, Typography } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
+import { useNavigate } from 'react-router-dom';
 
 // this is just a fake chat room, in reality we would probably use 3rd party chat plugin like sendbird
 const ChatPage = () => {
     const [messages, setMessages] = useState([]); // Holds all chat messages
     const [currentMessage, setCurrentMessage] = useState(''); // Current message being typed
+
+    const isAuthenticated = !!localStorage.getItem('accessToken'); // localStorage.removeItem('accessToken');
+    console.log(isAuthenticated)
+    const navigate = useNavigate()
+    useEffect(() => {
+        // Redirect to the login page if the user is not authenticated
+        if (!isAuthenticated) {
+            navigate('/');
+        }
+    }, [isAuthenticated, navigate]);
+
 
     // Function to handle sending a message
     const sendMessage = () => {
